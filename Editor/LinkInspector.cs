@@ -1,26 +1,22 @@
-﻿using SceneLinker.Runtime;
-using UnityEditor;
+﻿using UnityEditor;
 
-namespace SceneLinker.Editor
+[CustomEditor(typeof(Link))]
+public class LinkInspector : Editor
 {
-    [CustomEditor(typeof(Link))]
-    public class LinkInspector : UnityEditor.Editor
+    private SerializedProperty _linker;
+    private Link _link;
+
+    private void OnEnable()
     {
-        private SerializedProperty _linker;
-        private Link _link;
+        _link = (Link)target;
+        _linker = serializedObject.FindProperty("handledBy");
+    }
 
-        private void OnEnable()
-        {
-            _link = (Link)target;
-            _linker = serializedObject.FindProperty("handledBy");
-        }
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
 
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            EditorGUILayout.PropertyField(_linker);
-            serializedObject.ApplyModifiedProperties();
-        }
+        EditorGUILayout.PropertyField(_linker);
+        serializedObject.ApplyModifiedProperties();
     }
 }

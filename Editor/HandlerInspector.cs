@@ -1,59 +1,54 @@
-﻿
-using SceneLinker.Runtime;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-namespace SceneLinker.Editor
+[CustomEditor(typeof(Handler))]
+public class HandlerInspector : Editor
 {
-    [CustomEditor(typeof(Handler))]
-    public class HandlerInspector : UnityEditor.Editor
+    private Handler _handler;
+    private SerializedProperty _sceneToHandle;
+
+    private void OnEnable()
     {
-        private Handler _handler;
-        private SerializedProperty _sceneToHandle;
+        _handler = (Handler)target;
+        _sceneToHandle = serializedObject.FindProperty("sceneToHandle");
+    }
 
-        private void OnEnable()
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+        DrawCustomInspector();
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    private void DrawCustomInspector()
+    {
+        EditorGUILayout.PropertyField(_sceneToHandle);
+        EditorGUILayout.Separator();
+
+        EditorGUILayout.LabelField("Linkers:");
+        EditorGUILayout.BeginVertical(Constants.PaddingStyle);
+        foreach (var linker in _handler.linkers)
         {
-            _handler = (Handler)target;
-            _sceneToHandle = serializedObject.FindProperty("sceneToHandle");
+            DrawEmbeddedLinker(linker);
         }
 
-        public override void OnInspectorGUI()
+        EditorGUILayout.EndVertical();
+
+        if (GUILayout.Button("Add Linker"))
         {
-            serializedObject.Update();
-            DrawCustomInspector();
-            serializedObject.ApplyModifiedProperties();
+            Handler.AddLinker(_handler);
         }
+    }
 
-        private void DrawCustomInspector()
+    private void DrawEmbeddedLinker(Linker linker)
+    {
+        EditorGUILayout.BeginVertical(Constants.CustomLinkerInspectorStyle);
+        CreateEditor(linker).OnInspectorGUI();
+        if (GUILayout.Button("Remove this"))
         {
-            EditorGUILayout.PropertyField(_sceneToHandle);
-            EditorGUILayout.Separator();
-
-            EditorGUILayout.LabelField("Linkers:");
-            EditorGUILayout.BeginVertical(Constants.PaddingStyle);
-            foreach (var linker in _handler.linkers)
-            {
-                DrawEmbeddedLinker(linker);
-            }
-
-            EditorGUILayout.EndVertical();
-
-            if (GUILayout.Button("Add Linker"))
-            {
-                Handler.AddLinker(_handler);
-            }
+            Handler.RemoveLinker(_handler, linker);
         }
-
-        private void DrawEmbeddedLinker(Linker linker)
-        {
-            EditorGUILayout.BeginVertical(Constants.CustomLinkerInspectorStyle);
-            CreateEditor(linker).OnInspectorGUI();
-            if (GUILayout.Button("Remove this"))
-            {
-                Handler.RemoveLinker(_handler, linker);
-            }
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.Separator();
-        }
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.Separator();
     }
 }
