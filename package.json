@@ -1,0 +1,18 @@
+{
+  "name": "com.lucabrini.scenelinker",
+  "version": "1.0.0",
+  "displayName": "Scene Linker",
+  "description": "Scene Linker is a tool for linking together scenes and transitions between them!",
+  "keywords": [
+    "scene",
+    "scene manager",
+    "scene asset",
+    "world",
+    "world graph"
+  ],
+  "author": {
+    "name": "Luca Brini",
+    "email": "brini.luca@icloud.com",
+    "url": "https://lucabrini.it/"
+  }
+},
