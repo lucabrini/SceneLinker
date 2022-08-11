@@ -48,7 +48,30 @@ public class HandlerInspector : Editor
         {
             Handler.RemoveLinker(_handler, linker);
         }
+
         EditorGUILayout.EndVertical();
         EditorGUILayout.Separator();
+    }
+
+    [MenuItem("Assets/Create/Scene Linker/Handler of this Scene", false, 1)]
+    public static void CreateHandlerFromSelection(MenuCommand command)
+    {
+        var selection = Selection.GetFiltered<SceneAsset>(SelectionMode.Assets);
+        if (selection.Length == 0)
+        {
+            Debug.LogError("You must select a scene in order to use this function");
+            return;
+        }
+        foreach (var scene in selection)
+        {
+            var newHandler = CreateInstance<Handler>();
+            newHandler.sceneToHandle = scene;
+            newHandler.name = $"{scene.name}Handler";
+
+            var assetPath = AssetDatabase.GetAssetPath(scene).Replace($"{scene.name}.unity", $"{newHandler.name}.asset");
+            AssetDatabase.CreateAsset(newHandler, assetPath);
+        }
+
+        AssetDatabase.SaveAssets();
     }
 }

@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SceneLinker/Handler", menuName = "SceneLinker/Handler")]
+[CreateAssetMenu(fileName = "SceneHandler", menuName = "Scene Linker/Handler")]
 public class Handler : ScriptableObject
 {
     public SceneAsset sceneToHandle;

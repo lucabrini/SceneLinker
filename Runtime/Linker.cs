@@ -1,8 +1,8 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
-
-[CreateAssetMenu(fileName = "SceneLinker/Linker", menuName = "SceneLinker/Linker")]
+[CreateAssetMenu(fileName = "SceneLinker", menuName = "Scene Linker/Linker")]
 public class Linker : ScriptableObject
 {
     public string linkName;
@@ -27,8 +27,28 @@ public class Linker : ScriptableObject
     {
         if (_previousName == null || _previousName != linkName)
         {
-            //RenameLinker(linkName);
+            RenameLinker(linkName);
             _previousName = linkName;
+        }
+    }
+
+    private void RenameLinker(string newName)
+    {
+        try
+        {
+            name = newName;
+            const string tempAssetPath = "Assets/temp-987654321.anim";
+            AssetDatabase.CreateAsset(new AnimationClip(), tempAssetPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            AssetDatabase.DeleteAsset(tempAssetPath);
+            /*AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), newName);*/
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        catch (Exception e)
+        {
+            ;
         }
     }
 
@@ -57,19 +77,6 @@ public class Linker : ScriptableObject
     public static void RemoveLinkerSubasset(Linker linker)
     {
         AssetDatabase.RemoveObjectFromAsset(linker);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-    }
-
-    public void RenameLinker(string newName)
-    {
-        name = newName;
-        const string tempAssetPath = "Assets/temp-987654321.anim";
-        AssetDatabase.CreateAsset(new AnimationClip(), tempAssetPath);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        AssetDatabase.DeleteAsset(tempAssetPath);
-        /*AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(this), newName);*/
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }

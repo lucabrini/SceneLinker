@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4171786809652776182}
   - component: {fileID: 4171786809652776181}
-  - component: {fileID: -5253933274658515045}
+  - component: {fileID: 8965603949300315500}
   m_Layer: 0
   m_Name: LinkPrefab
   m_TagString: Respawn
@@ -59,7 +59,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5772004, y: 2.408529}
   m_EdgeRadius: 0
---- !u!114 &-5253933274658515045
+--- !u!114 &8965603949300315500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4171786809652776187}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb1653b02dd64f27a4415a6181e2e04d, type: 3}
+  m_Script: {fileID: 11500000, guid: 891b903098bff6c4498415c4ea70ce9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   handledBy: {fileID: 0}

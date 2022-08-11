@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[AddComponentMenu("Scene Linker/Add Linkable Component")]
 public class Linkable : MonoBehaviour
 {
     [SerializeField] private bool justTeleported = false;

@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[AddComponentMenu("Scene Linker/Add Link Component")]
 public class Link : MonoBehaviour
 {
     public Linker handledBy;
-
+    [SerializeField] private string detectableTag = "Player";
     private Vector2 _previousLocation;
 
     private void OnValidate()
@@ -17,14 +20,26 @@ public class Link : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.gameObject.CompareTag("Player")) return;
+        var destinationScene = handledBy.destinationScene.sceneToHandle;
+        if (destinationScene == null)
+        {
+            throw new NullReferenceException("Destination Scene Handler has no scene selected.");
+        }
 
-        var linkablePlayer = other.gameObject.GetComponent<Linkable>();
-        if (linkablePlayer.HasJustBeenTeleported()) return;
-
-        SceneManager.LoadScene(handledBy.destinationScene.sceneToHandle.name);
+        if (!other.gameObject.CompareTag(detectableTag)) return;
         var player = other.gameObject;
-        linkablePlayer.SetJustTeleported(true);
+
+        var linkableComponent = player.GetComponent<Linkable>();
+        if (linkableComponent == null)
+        {
+            throw new NullReferenceException("The GameObject to handle must have a 'Linkable' component attached.");
+        }
+
+        if (linkableComponent.HasJustBeenTeleported()) return;
+
+        SceneManager.LoadScene(destinationScene.name);
+        
+        linkableComponent.SetJustTeleported(true);
         player.transform.position = handledBy.destinationLink.GetDestinationLinkLocation();
     }
 
